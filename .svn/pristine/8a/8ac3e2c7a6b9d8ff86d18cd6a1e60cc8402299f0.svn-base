@@ -1,0 +1,228 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+<title>产品管理</title>
+<meta name="decorator" content="default" />
+<script type="text/javascript">
+		$(document).ready(function() {
+			$("#name").focus();
+			$("#inputForm").validate({
+			   rules:{
+			     code:{
+			      required:true,
+			      rangelength:[5,10],
+			      remote:"${ctx}/sierac/product/check?oldcode=" + encodeURIComponent('${product.code}')
+			     },
+			     name:{
+			       required:true,
+			      rangelength:[1,10]
+			     },
+			     shelfLife:{
+			     required:true,
+			     digits:true
+			     },
+			     pcsPerCtn:{
+			      required:true,
+			     digits:true
+			     }
+			   },
+			   messages:{
+			    code:{
+			      required:"产品编码不能为空",
+			      rangelength:"编码长度在5-10之间",
+			      remote:"该产品编码已经存在，请重新输入"
+			    },
+			   
+			    name:{
+			       required:"产品名称不能为空",
+			       rangelength:"产品名称长度介于1-10之间"
+			    },
+			    shelfLife:{
+			     required:"保质期不能为空",
+			     digits:"必须为整数"
+			    },
+			    pcsPerCtn:{
+			    required:"每箱单品数不能为空",
+			     digits:"单品数必须为整数"
+			    }
+			   },
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});
+
+												name : {
+													required : true,
+													rangelength : [ 1, 10 ]
+												},
+												shelfLife : {
+													required : true,
+													digits : true
+												},
+												pcsPerCtn : {
+													required : true,
+													digits : true
+												}
+											},
+											messages : {
+												code : {
+													required : "产品编码不能为空",
+													rangelength : "编码长度在5-10之间",
+													remote : "该产品编码已经存在，请重新输入"
+												},
+
+												name : {
+													required : "产品名称不能为空",
+													rangelength : "产品名称长度介于1-10之间"
+												},
+												shelfLife : {
+													required : "保质期不能为空",
+													digits : "必须为整数"
+												},
+												pcsPerCtn : {
+													required : "每箱单品数不能为空",
+													digits : "单品数必须为整数"
+												}
+											},
+											submitHandler : function(form) {
+												loading('正在提交，请稍等...');
+												form.submit();
+											},
+											errorContainer : "#messageBox",
+											errorPlacement : function(error,
+													element) {
+												$("#messageBox").text(
+														"输入有误，请先更正。");
+												if (element.is(":checkbox")
+														|| element.is(":radio")
+														|| element
+																.parent()
+																.is(
+																		".input-append")) {
+													error.appendTo(element
+															.parent().parent());
+												} else {
+													error.insertAfter(element);
+												}
+											}
+										});
+
+					});
+</script>
+</head>
+<body>
+	<ul class="nav nav-tabs">
+		<li><a href="${ctx}/sierac/product/">产品列表</a></li>
+		<li class="active"><a
+			href="${ctx}/sierac/product/form?id=${product.id}">产品<shiro:hasPermission
+					name="sierac:product:edit">${not empty product.id?'修改':'添加'}</shiro:hasPermission>
+				<shiro:lacksPermission name="sierac:product:edit">查看</shiro:lacksPermission></a></li>
+	</ul>
+	<br />
+	<form:form id="inputForm" modelAttribute="product"
+		action="${ctx}/sierac/product/save" method="post"
+		class="form-horizontal">
+		<form:hidden path="id" />
+		<sys:message content="${message}" />
+		<div class="control-group">
+			<label class="control-label" id="code">产品代码：</label>
+			<div class="controls">
+				<c:choose>
+					<c:when test="${empty product.id}">
+						<form:input path="code" htmlEscape="false" maxlength="255"
+							class="input-xlarge" />
+					</c:when>
+					<c:otherwise>
+						<form:input path="code" htmlEscape="false" maxlength="255"
+							class="input-xlarge" readonly="true" />
+					</c:otherwise>
+				</c:choose>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" id="name">产品名称：</label>
+			<div class="controls">
+				<c:choose>
+					<c:when test="${empty product.id}">
+						<form:input path="name" htmlEscape="false" maxlength="255"
+							class="input-xlarge" />
+					</c:when>
+					<c:otherwise>
+						<form:input path="name" htmlEscape="false" maxlength="255"
+							class="input-xlarge" readonly="true" />
+					</c:otherwise>
+				</c:choose>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" id="shortName">产品简称：</label>
+			<div class="controls">
+				<form:input path="shortName" htmlEscape="false" maxlength="64"
+					class="input-xlarge" />
+
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" id="pcsPerCtn">每箱单品数：</label>
+			<div class="controls">
+				<form:input path="pcsPerCtn" htmlEscape="false" maxlength="11"
+					class="input-xlarge " />
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" id="barcode">条码：</label>
+			<div class="controls">
+				<form:input path="barcode" htmlEscape="false" maxlength="64"
+					class="input-xlarge " />
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" id="shelfLife">保质期：</label>
+			<div class="controls">
+				<form:input path="shelfLife" htmlEscape="false" maxlength="64"
+					class="input-xlarge " />
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" id="spec">规格：</label>
+			<div class="controls">
+				<form:input path="spec" htmlEscape="false" maxlength="255"
+					class="input-xlarge " />
+			</div>
+		</div>
+
+		<div class="control-group">
+			<label class="control-label" id="remarks">备注信息：</label>
+			<div class="controls">
+				<form:textarea path="remarks" htmlEscape="false" rows="4"
+					maxlength="255" class="input-xxlarge " />
+			</div>
+		</div>
+		<div class="form-actions">
+			<shiro:hasPermission name="sierac:product:edit">
+				<input id="btnSubmit" class="btn btn-primary" type="submit"
+					value="保 存" />&nbsp;</shiro:hasPermission>
+			<input id="btnCancel" class="btn" type="button" value="返 回"
+				onclick="history.go(-1)" />
+		</div>
+	</form:form>
+</body>
+</html>

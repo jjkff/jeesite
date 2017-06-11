@@ -1,0 +1,119 @@
+<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ include file="/WEB-INF/views/include/taglib.jsp"%>
+<html>
+<head>
+	<title>仓库信息管理</title>
+	<meta name="decorator" content="default"/>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			//$("#name").focus();
+			$("#inputForm").validate({
+				rules:{
+					code:{
+						required: true,
+						rangelength:[3,10],
+							remote: {
+							    url: "${ctx}/sierac/rdcWarehouse/ajax",     //后台处理程序
+							    type: "post",               //数据发送方式
+							    dataType: "json",           //接受数据格式   
+							    data: {                     //要传递的数据
+							        code: function() {
+							            return $("#code").val();
+							        }
+							    }
+							}
+					},
+					name:{
+						required: true,
+						rangelength:[3,10]
+					},
+					type:{
+						required: true,
+					},
+					isScanUse:{
+						required: true,
+					},
+				},
+				messages: {
+					code: {
+						required: "仓库代码不能为空",
+						rangelength:"长度介于3到10之间"	,
+						remote:"该仓库代码已存在,请重新输入"
+					},
+					name: {
+						required: "仓库名称不能为空",
+						rangelength:"长度介于3到10之间"	
+					},
+					type:{
+						required:"仓库类型不能为空"
+					},
+					isScanUse:{
+						required:"扫描可用不能为空"
+					}
+				},
+				submitHandler: function(form){
+					loading('正在提交，请稍等...');
+					form.submit();
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					$("#messageBox").text("输入有误，请先更正。");
+					if (element.is(":checkbox")||element.is(":radio")||element.parent().is(".input-append")){
+						error.appendTo(element.parent().parent());
+					} else {
+						error.insertAfter(element);
+					}
+				}
+			});
+		});
+	</script>
+</head>
+<body>
+	<ul class="nav nav-tabs">
+		<li><a href="${ctx}/sierac/rdcWarehouse/">仓库信息列表</a></li>
+		<li class="active"><a href="${ctx}/sierac/rdcWarehouse/form?id=${rdcWarehouse.id}">仓库信息<shiro:hasPermission name="sierac:rdcWarehouse:edit">${not empty rdcWarehouse.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="sierac:rdcWarehouse:edit">查看</shiro:lacksPermission></a></li>
+	</ul><br/>
+	<form:form id="inputForm" modelAttribute="rdcWarehouse" action="${ctx}/sierac/rdcWarehouse/save" method="post" class="form-horizontal">
+		<form:hidden path="id"/>
+		<sys:message content="${message}"/>		
+		<div class="control-group">
+			<label class="control-label">仓库代码：</label>
+			<div class="controls">
+				<form:input path="code" id="code" htmlEscape="false" maxlength="10" minlength="3" class="input-xlarge"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">仓库名称：</label>
+			<div class="controls">
+				<form:input path="name" htmlEscape="false" maxlength="10" minlength="3" class="input-xlarge"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">仓库类型：</label>
+			<div class="controls">
+				<form:input id="type" path="type" htmlEscape="false" maxlength="255" class="input-xlarge" minlength="5" />
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">扫描可用：</label>
+			<div class="controls">
+				<form:input path="isScanUse" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+				<span class="help-inline"><font color="red">*</font> </span>
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label">备注信息：</label>
+			<div class="controls">
+				<form:input path="remarks" htmlEscape="false" maxlength="255" class="input-xlarge"/>
+			</div>
+		</div>
+		<div class="form-actions">
+			<shiro:hasPermission name="sierac:rdcWarehouse:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+		</div>
+	</form:form>
+</body>
+</html>

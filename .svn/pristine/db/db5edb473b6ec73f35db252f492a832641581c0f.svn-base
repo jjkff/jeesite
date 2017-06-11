@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.RdcReturnHeaderDao">
+    
+	<sql id="rdcReturnHeaderColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.order_code AS "orderCode",
+		a.update_id AS "updateId",
+		a.update_time AS "updateTime",
+		a.scan_by AS "scanBy",
+		a.scan_time AS "scanTime",
+		a.bill_type AS "billType",
+		a.bill_status AS "billStatus",
+		a.submit_by AS "submitBy",
+		a.submit_date AS "submitDate",
+		a.return_id AS "returnId",
+		a.return_code AS "returnCode",
+		a.return_name AS "returnName",
+		a.receive_id AS "receiveId",
+		a.receive_phone AS "receivePhone",
+		a.receive_address AS "receiveAddress",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="rdcReturnHeaderJoins">
+	</sql>
+    
+	<select id="get" resultType="RdcReturnHeader">
+		SELECT 
+			<include refid="rdcReturnHeaderColumns"/>
+		FROM rdc_return_header a
+		<include refid="rdcReturnHeaderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RdcReturnHeader">
+		SELECT 
+			<include refid="rdcReturnHeaderColumns"/>
+		FROM rdc_return_header a
+		<include refid="rdcReturnHeaderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code != null and code != ''">
+				AND a.code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{code}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{code}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{code},'%')</if>
+			</if>
+			<if test="beginUpdateTime != null and endUpdateTime != null and beginUpdateTime != '' and endUpdateTime != ''">
+				AND a.update_time BETWEEN #{beginUpdateTime} AND #{endUpdateTime}
+			</if>
+			<if test="returnCode != null and returnCode != ''">
+				AND a.return_code = #{returnCode}
+			</if>
+			<if test="orderCode != null and orderCode != ''">
+				AND a.order_code = #{orderCode}
+			</if>
+			<if test="returnName != null and returnName != ''">
+				AND a.return_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{returnName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{returnName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{returnName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="RdcReturnHeader">
+		SELECT 
+			<include refid="rdcReturnHeaderColumns"/>
+		FROM rdc_return_header a
+		<include refid="rdcReturnHeaderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO rdc_return_header(
+			id,
+			code,
+			order_code,
+			update_id,
+			update_time,
+			scan_by,
+			scan_time,
+			bill_type,
+			bill_status,
+			submit_by,
+			submit_date,
+			return_id,
+			return_code,
+			return_name,
+			receive_id,
+			receive_phone,
+			receive_address,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{orderCode},
+			#{updateId},
+			#{updateTime},
+			#{scanBy},
+			#{scanTime},
+			#{billType},
+			#{billStatus},
+			#{submitBy},
+			#{submitDate},
+			#{returnId},
+			#{returnCode},
+			#{returnName},
+			#{receiveId},
+			#{receivePhone},
+			#{receiveAddress},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE rdc_return_header SET 	
+			code = #{code},
+			order_code = #{orderCode},
+			update_id = #{updateId},
+			update_time = #{updateTime},
+			scan_by = #{scanBy},
+			scan_time = #{scanTime},
+			bill_type = #{billType},
+			bill_status = #{billStatus},
+			submit_by = #{submitBy},
+			submit_date = #{submitDate},
+			return_id = #{returnId},
+			return_code = #{returnCode},
+			return_name = #{returnName},
+			receive_id = #{receiveId},
+			receive_phone = #{receivePhone},
+			receive_address = #{receiveAddress},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE rdc_return_header SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

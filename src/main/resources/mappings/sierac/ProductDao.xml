@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.ProductDao">
+   
+	<sql id="productColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.sku AS "sku",
+		a.name AS "name",
+		a.full_name AS "fullName",
+		a.short_name AS "shortName",
+		a.english_name AS "englishName",
+		a.spec AS "spec",
+		a.shelf_life AS "shelfLife",
+		a.ctn_gtin AS "ctnGtin",
+		a.pcs_gtin AS "pcsGtin",
+		a.type_id AS "typeId",
+		a.active AS "active",
+		a.pcs_per_ctn AS "pcsPerCtn",
+		a.ctn_per_plt AS "ctnPerPlt",
+		a.barcode AS "barcode",
+		a.jde_code AS "jdeCode",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.type AS "type"
+	</sql>
+	
+	<sql id="productJoins">
+	</sql>
+    
+	<select id="get" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM product a
+		<include refid="productJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM product a
+		<include refid="productJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findAll" resultType="Product">
+	SELECT id ,code,sku,name,
+	full_name,shelf_life,pcs_gtin,ctn_gtin,pcs_per_ctn,
+	ctn_per_plt,spec,type
+	FROM product a
+	<include refid="productJoins"/>
+	<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+	</select>
+	<select id="findByname" resultType="Product">
+	  SELECT id,name
+	  FROM product 
+	</select>
+	<select id="findAllList" resultType="Product">
+		SELECT 
+			<include refid="productColumns"/>
+		FROM product a
+		<include refid="productJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO product(
+			id,
+			code,
+			sku,
+			name,
+			full_name,
+			short_name,
+			english_name,
+			spec,
+			shelf_life,
+			ctn_gtin,
+			pcs_gtin,
+			type_id,
+			active,
+			pcs_per_ctn,
+			ctn_per_plt,
+			barcode,
+			jde_code,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{sku},
+			#{name},
+			#{fullName},
+			#{shortName},
+			#{englishName},
+			#{spec},
+			#{shelfLife},
+			#{ctnGtin},
+			#{pcsGtin},
+			#{typeId},
+			#{active},
+			#{pcsPerCtn},
+			#{ctnPerPlt},
+			#{barcode},
+			#{jdeCode},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE product SET 	
+			name = #{name},
+			full_name = #{fullName},
+			short_name = #{shortName},
+			english_name = #{englishName},
+			spec = #{spec},
+			ctn_gtin = #{ctnGtin},
+			pcs_gtin = #{pcsGtin},
+			type_id = #{typeId},
+			active = #{active},
+			pcs_per_ctn = #{pcsPerCtn},
+			ctn_per_plt = #{ctnPerPlt},
+			barcode = #{barcode},
+			jde_code = #{jdeCode},
+			create_date = #{createDate},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			del_flag = #{delFlag}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE product SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<select id="findByCode" resultType="Product">
+		SELECT
+			id
+		FROM
+			product
+		WHERE
+			CODE =#{code}
+	</select>
+	<update id="truncate">
+		delete from product
+	</update>
+</mapper>

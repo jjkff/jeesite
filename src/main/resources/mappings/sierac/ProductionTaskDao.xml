@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.ProductionTaskDao">
+    
+	<sql id="productiontaskColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.factoryid AS "factoryid",
+		a.linecode AS "linecode",
+		a.batch_code AS "batchCode",
+		a.pack_date AS "packDate",
+		a.expectqty AS "expectqty",
+		a.begin_time AS "beginTime",
+		a.end_time AS "endTime",
+		a.validperiod AS "validperiod",
+		a.status AS "status",
+		a.task_type AS "taskType",
+		a.rang_one AS "rangOne",
+		a.rang_two AS "rangTwo",
+		a.rang_three AS "rangThree",
+		a.warranty AS "warranty",
+		a.attr1 AS "attr1",
+		a.attr2 AS "attr2",
+		a.attr3 AS "attr3",
+		a.attr4 AS "attr4",
+		a.attr5 AS "attr5",
+		a.inventorymaterialid AS "inventorymaterialid",
+		a.expectctnqty AS "expectctnqty",
+		a.productid AS "productid",
+		p.name AS "name",
+		p.code AS "pcode"
+		
+	</sql>
+	
+	<sql id="productiontaskJoins">
+	</sql>
+    
+	<select id="get" resultType="ProductionTask">
+		SELECT 
+			<include refid="productiontaskColumns"/>
+		FROM productiontask a,product p
+		<include refid="productiontaskJoins"/>
+		WHERE a.id = #{id}
+		AND  a.productid=p.id
+	</select>
+	
+	<select id="findList" resultType="ProductionTask">
+		SELECT 
+			a.id,a.code,a.factoryId,a.linecode,a.batch_code,a.pack_date,a.expectQty,
+			a.begin_time,a.end_time,a.validperiod,a.status,
+            a.task_type,a.rang_one,a.rang_two,a.rang_three,
+            a.warranty,a.attr1,a.attr2,a.attr3,a.attr4,a.attr5,
+            a.inventorymaterialId,a.expectctnQty,p.name as name,p.sku 
+		   FROM productiontask a,product p
+		<where>
+			a.productid=p.id
+			<if test="linecode != null and linecode != ''">
+				AND a.linecode = #{linecode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="ProductionTask">
+		SELECT 
+			<include refid="productiontaskColumns"/>
+		FROM productiontask a
+		<include refid="productiontaskJoins"/>
+		<where>
+			a.productid=p.id
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO productiontask(
+			id,
+			code,
+			factoryid,
+			linecode,
+			batch_code,
+			pack_date,
+			expectqty,
+			begin_time,
+			end_time,
+			validperiod,
+			status,
+			task_type,
+			rang_one,
+			rang_two,
+			rang_three,
+			warranty,
+			attr1,
+			attr2,
+			attr3,
+			attr4,
+			attr5,
+			inventorymaterialid,
+			expectctnqty,
+			productid
+		) VALUES (
+			#{id},
+			#{code},
+			#{factoryid},
+			#{linecode},
+			#{batchCode},
+			#{packDate},
+			#{expectqty},
+			#{beginTime},
+			#{endTime},
+			#{validperiod},
+			#{status},
+			#{taskType},
+			#{rangOne},
+			#{rangTwo},
+			#{rangThree},
+			#{warranty},
+			#{attr1},
+			#{attr2},
+			#{attr3},
+			#{attr4},
+			#{attr5},
+			#{inventorymaterialid},
+			#{expectctnqty},
+			#{productid}
+		)
+	</insert>
+	<select id="findProductionTaskByProductId" resultType="ProductionTask">
+		SELECT
+			a.id, a.code
+		FROM Productiontask a
+		where
+			 a.productid = #{productid}
+		ORDER BY a.code
+	</select>
+	
+	<update id="update">
+		UPDATE productiontask a
+		SET
+		    code = #{code},
+		    linecode = #{linecode},
+		    batch_code = #{batchCode},
+			pack_date = #{packDate},
+			expectqty = #{expectqty},
+			begin_time = #{beginTime},
+			end_time = #{endTime},
+			validperiod = #{validperiod},
+			status = #{status},
+			task_type = #{taskType},
+			warranty = #{warranty},
+			expectctnqty = #{expectctnqty}
+		WHERE a.id = #{id}
+	</update>
+	<update id="delete">
+		DELETE FROM productiontask a
+		WHERE a.id = #{id}
+	</update>
+
+	<select id="findByCode" resultType="Productiontask">
+		SELECT
+		id
+		FROM
+		productiontask
+		WHERE
+		CODE =#{code}
+	</select>
+	
+	<update id="truncate">
+		delete from productiontask
+	</update>
+</mapper>

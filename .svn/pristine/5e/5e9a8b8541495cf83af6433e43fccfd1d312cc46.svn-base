@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.ApiRdcReturnDataDao">
+	<insert id="insert">
+		INSERT INTO rdc_return_data (
+		  `id`,
+		  `header_id`,
+		  `detail_id`,
+		  `ctn_code`,
+		  `product_id`,
+		  `batch_code`,
+		  `scan_code`,
+		  `scan_by`,
+		  `scan_time`,
+		  `qty`,
+		   create_by,
+		   create_date,
+		   update_by,
+		   update_date,
+		   remarks,
+		   del_flag
+		) 
+		VALUES
+		  (
+		   	#{id},
+		   	#{header_id},
+		   	#{detail_id},
+		    #{ctn_code},
+		    #{product_id},
+		   	#{batch_code},
+		    #{scan_code},
+		    #{scan_by},
+		    #{scan_time},
+		    #{qty},
+		    #{createBy},
+			#{createDate},
+			#{updateBy},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		  ) 
+	</insert>
+</mapper>

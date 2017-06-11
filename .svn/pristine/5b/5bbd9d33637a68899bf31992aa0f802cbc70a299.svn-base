@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.RdcOutDetailDao">
+
+
+	<select id="get" resultType="RdcOutDetail">
+		SELECT
+			rh.`id` AS id,
+			rh.`order_code` AS orderCode,
+			rh.`submit_date` AS sumitDate,
+			rh.send_code AS sendCode,
+			rh.send_name AS sendName,
+			rh.receive_name AS receiveName,
+			rh.receive_phone AS receivePhone,
+			rh.receive_address AS receiveAddress,
+			p.`code` AS pCode,
+			p.`name` AS pName,
+			rd.`expect_pcs_qty` AS expectPcsQty,
+			rd.`actual_pcs_qty` AS actualPcsQty,
+			rh.`scan_begin_time` AS scanBeginTime,
+			rh.`upload_time` AS uploadTime
+		FROM
+			rdc_out_header rh
+		LEFT JOIN rdc_out_detail rd ON rh.`id` = rd.`header_id`
+		LEFT JOIN product p ON rd.`product_id` = p.`id`
+		WHERE 
+		rh.id=#{id}
+	</select>
+
+	 <select id="findList" resultType="RdcOutDetail">
+		SELECT
+			rh.`id` AS id,
+			rh.`order_code` AS orderCode,
+			rh.`submit_date` AS sumitDate,
+			rh.send_code AS sendCode,
+			rh.send_name AS sendName,
+			rh.receive_name AS receiveName,
+			rh.receive_phone AS receivePhone,
+			rh.receive_address AS receiveAddress,
+			p.`code` AS pCode,
+			p.`name` AS pName,
+			rd.`expect_pcs_qty` AS expectPcsQty,
+			rd.`actual_pcs_qty` AS actualPcsQty,
+			rh.`scan_begin_time` AS scanBeginTime,
+			rh.`upload_time` AS uploadTime
+		FROM
+			rdc_out_header rh
+		LEFT JOIN rdc_out_detail rd ON rh.`id` = rd.`header_id`
+		LEFT JOIN product p ON rd.`product_id` = p.`id`
+		LEFT JOIN code_data c ON c.out_header_id = rh.id
+		<where>
+		 rh.del_flag = #{DEL_FLAG_NORMAL} 
+			<if test="orderCode != null and orderCode != ''">
+				AND h.order_code LIKE 
+					<if test="dbName == 'mysql'">concat('%',#{orderCode},'%')</if>
+			</if>
+			<if test="sendCode != null and sendCode != ''">
+				AND rh.send_code = #{sendCode}
+			</if>
+			<if test="beginSubmitDate != null and endSubmitDate != null and beginSubmitDate != '' and endSubmitDate != ''">
+				AND  rh.submit_date BETWEEN #{beginSubmitDate} AND #{endSubmitDate}
+			</if>
+			<if test="sendName != null and sendName != ''">
+				AND rh.send_name LIKE 
+					<if test="dbName == 'mysql'">concat('%',#{sendName},'%')</if>
+			</if>
+			<if test="pCode != null and pCode != ''">
+				AND p.code LIKE 
+					<if test="dbName == 'mysql'">concat('%',#{pCode},'%')</if>
+			</if>
+			<if test="pName != null and pName != ''">
+					AND  p.name LIKE 
+						<if test="dbName == 'mysql'">concat('%',#{pName},'%')</if>
+			</if>
+		</where>
+		<!-- group by rh.id, p.code, p.name,rd.expect_pcs_qty,rd.actual_pcs_qty -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY  rh.submit_date DESC
+			</otherwise>
+		</choose>
+	</select> 
+	
+	<update id="truncate">
+		delete from rdc_out_detail
+	</update>
+	
+		<insert id="insert">
+		INSERT INTO rdc_out_detail(
+			id,
+			header_id,
+			product_id,
+			expect_pcs_qty,
+			actual_pcs_qty
+		) VALUES (
+			#{id},
+			#{headerId},
+			#{productId},
+			#{expectPcsQty},
+			#{actualPcsQty}
+		)
+	</insert>
+</mapper>

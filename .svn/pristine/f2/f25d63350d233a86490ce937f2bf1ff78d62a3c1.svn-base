@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.QueryReportDao">
+	<select id="findList" resultType="QueryReport">
+		SELECT
+		qr.`id` AS qId,
+		qr.`code` AS qCode,
+		p.`code` AS pCode,
+		p.name AS pName,
+		cd.batch_code AS batchCode,
+		qr.qty AS qQty
+		FROM
+		query_report qr,
+		code_data cd,
+		product p
+		<where>
+			qr.`code` = cd.`code`
+			AND cd.`product_id` = p.`id`
+			<if test="qCode != null and qCode != ''">
+				AND qr.`code` = #{qCode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY qr.`code` DESC
+			</otherwise>
+		</choose>
+	</select>
+	<update id="updateByMine" >
+		UPDATE query_report qr
+		SET 	
+			qr.qty=qr.qty+1
+		WHERE 
+		qr.`code`=#{qCode} 
+	</update>
+	<insert id="insert">
+		INSERT INTO query_report (
+		    `id`, 
+		    `code`
+		    ) 
+			VALUES(
+			#{id},
+			#{qCode}
+		)
+	</insert>
+	<select id="findAll" resultType="QueryReport">
+		select * from query_report 
+		where
+		    `code`=#{qCode}
+	</select>
+</mapper>

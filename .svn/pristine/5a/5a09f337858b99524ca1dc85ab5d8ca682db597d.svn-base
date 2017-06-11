@@ -1,0 +1,111 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.sierac.entity;
+
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+import com.thinkgem.jeesite.modules.sys.entity.User;
+
+/**
+ * CRUD操作Entity
+ * 
+ * @author mjj
+ * @version 2017-02-13
+ */
+public class RdcWarehouse extends DataEntity<RdcWarehouse> {
+
+    private static final long serialVersionUID = 1L;
+
+    private String code; // 仓库代码
+
+    private String name; // 仓库名称
+
+    private Integer type; // type
+
+    private User user;// 用户id
+
+    private String username;// 用户姓名
+
+    private String loginName;// 登录名
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    private String isScanUse; // is_scan_use
+
+    public RdcWarehouse() {
+        super();
+    }
+
+    public RdcWarehouse(String id) {
+        super(id);
+    }
+
+    @NotNull(message = "仓库代码不能为空")
+    @ExcelField(title = "仓库代码", align = 2, sort = 1)
+    @Length(min = 3, max = 10, message = "仓库代码长度必须介于 1 和 64 之间")
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @NotNull(message = "仓库名称不能为空")
+    @ExcelField(title = "仓库名称", align = 2, sort = 2)
+    @Length(min = 3, max = 10, message = "仓库名称长度必须介于 1 和 255 之间")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    // @NotNull(message = "扫描可用不能为空")
+    @Length(min = 0, max = 1, message = "is_scan_use长度必须介于 0 和 1 之间")
+    public String getIsScanUse() {
+        return isScanUse;
+    }
+
+    // @NotNull(message = "仓库类型不能为空")
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public void setIsScanUse(String isScanUse) {
+        this.isScanUse = isScanUse;
+    }
+
+}

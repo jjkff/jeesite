@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/jquery.2.1.4.min.js"></script>
+    <style type="text/css">
+        #sierac_v{margin: auto;}
+        #sierac_v1{background-color: rgb(251,72,72);text-align: center;margin: auto;}
+        #sierac_v1 p{color: #FFFFFF;margin-top: 8px;font-family: "微软雅黑", "microsoft yahei";margin-bottom: 3px}
+        #sierac_img1{border-bottom: 30px;margin-top: 10px;}
+        #sierac_tr td{font-size: 10px;font-family: "微软雅黑", "microsoft yahei";text-align: center;border: 0 none}
+        #sierac_td4{border: 1px solid rgba(177, 164, 158, 0.45); height: 2px;background-color: rgba(177, 159, 161, 0.45)}
+        ul li{ list-style: none;border-bottom: 1px solid rgba(177, 164, 158, 0.45);line-height: 40px;padding-left: 45px;color: #0a98ea}
+        ul{margin: 0px; padding-left: 0px}
+        #sierac_li_one{background-image: url("bootstrap/images/name.jpg");background-position: left;background-repeat: no-repeat
+        ;font-family: "微软雅黑", "microsoft yahei" }
+        #sierac_li_two{background-image: url("bootstrap/images/5.png");background-position: left; background-repeat:no-repeat
+        ;font-family: "微软雅黑", "microsoft yahei" }
+        #sierac_li_thr{background-image: url("bootstrap/images/p.jpg");background-position: left; background-repeat:no-repeat
+        ;font-family: "微软雅黑", "microsoft yahei" }
+        #sierac_li_fore{background-image: url("bootstrap/images/day.jpg");background-position: left; background-repeat:no-repeat
+        ;font-family: "微软雅黑", "microsoft yahei" }
+    </style>
+
+</head>
+<body>
+<div id="sierac_v">
+    <div id="sierac_v1">
+        <img src="bootstrap/images/2.jpg" style="border-radius: 50%" id="sierac_img1">
+        <p>Sierac产品追溯系统</p>
+    </div>
+    <table border="0" style="margin: auto" >
+        <tr id="sierac_tr">
+            <td><p><img src="bootstrap/images/1.png"></p><label id="sierac_labe11">溯源</label></td>
+            <td><p><img src="bootstrap/images/3.png"></p><label id="sierac_labe12">防伪</label></td>
+            <td><p><img src="bootstrap/images/4.jpg"></p><label id="sierac_labe13">会员</label></td>
+        </tr>
+        <tr>
+            <td id="sierac_td4" colspan="3"></td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <ul>
+                    <li id="sierac_li_one">产品名称:&nbsp;&nbsp;&nbsp;<label> 沐浴露</label></li>
+                    <li id="sierac_li_two">产品编码:&nbsp;&nbsp;&nbsp;<label> ERTYER</label></li>
+                    <li id="sierac_li_thr">产品批号:&nbsp;&nbsp;&nbsp;<label>UYUTRE</label></li>
+                    <li id="sierac_li_fore">生产日期:&nbsp;&nbsp;&nbsp;<label>2017-01-19</label></li>
+
+                </ul>
+            </td>
+        </tr>
+
+    </table>
+</div>
+</body>
+</html>

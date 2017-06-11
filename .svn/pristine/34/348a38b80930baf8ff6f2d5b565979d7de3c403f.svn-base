@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.QueryReportDetailDao">
+	<select id="findById" resultType="QueryReportDetail">
+		SELECT 
+		  qr.`id` AS qrId,
+		  qd.`query_time` AS queryTime,
+		  qd.`query_ip` AS queryIp,
+		  qd.`location` AS location,
+		   qd.`query_report_id` AS queryReportId
+		FROM
+		  query_report_detail qd,
+		  query_report qr 
+		WHERE qd.`query_report_id` = qr.`id` 
+		and qr.`id`=#{qrId}
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY qd.`query_time` DESC
+			</otherwise>
+		</choose>
+	</select>
+	<select id="findList" resultType="QueryReportDetail">
+		SELECT 
+		  qr.`id` AS qrId,
+		  qd.`query_time` AS queryTime,
+		  qd.`query_ip` AS queryIp,
+		  qd.`location` AS location,
+		   qd.`query_report_id` AS queryReportId
+		FROM
+		  query_report_detail qd,
+		  query_report qr 
+		<where>
+			qd.`query_report_id` = qr.`id` 
+			<if test="qrId != null and qrId != ''">
+				AND qr.`id`=#{qrId}
+			</if>
+		</where> 
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY qd.`query_time` DESC
+			</otherwise>
+		</choose>
+	</select> 
+	<insert id="insert">
+		INSERT INTO query_report_detail(
+			id,
+			query_time,
+			query_ip,
+			location,
+			query_report_id
+		) VALUES (
+			#{id}, 
+			#{queryTime}, 
+			#{queryIp}, 
+			#{location},
+			#{queryReportId}
+		)
+	</insert>
+</mapper>

@@ -1,0 +1,295 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.sierac.entity;
+
+import org.hibernate.validator.constraints.Length;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+
+/**
+ * 生产任务查询Entity
+ * @author wgc
+ * @version 2017-03-01
+ */
+public class ProductionTask extends DataEntity<ProductionTask> {
+	
+	private static final long serialVersionUID = 1L;
+	private String code;		// 生产任务代码
+	private String factoryid;		// 工厂id
+	private String linecode;		// 生产线号
+	private String batchCode;		// 任务批号
+	private Date packDate;		// 包装日期
+	private String expectqty;		// 计划产量
+	private Date beginTime;		// 开始时间
+	private Date endTime;		// 结束时间
+	private Date validperiod;		// 有效期
+	private String status;		// 状态
+	private String taskType;		// 任务类型
+	private String rangOne;		// 范围1
+	private String rangTwo;		// 范围2
+	private String rangThree;		// 范围3
+	private String warranty;		// 保证
+	private String attr1;		// attr1
+	private String attr2;		// attr2
+	private String attr3;		// attr3
+	private String attr4;		// attr4
+	private String attr5;		// attr5
+	private String inventorymaterialid;		// 库存物料id
+	private String expectctnqty;		// 计划箱产量
+	private String name;		// 产品名称
+	private String pcode;       //产品编码
+	private String sku;         //产品sku
+	private String productid;    //产品id
+	private Product product;     //产品
+	
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+	public String getProductid() {
+		return productid;
+	}
+
+	public void setProductid(String productid) {
+		this.productid = productid;
+	}
+
+	public ProductionTask() {
+		super();
+	}
+
+	public ProductionTask(String id){
+		super(id);
+	}
+    
+	@Length(min=1, max=64, message="生产任务代码长度必须介于 1 和 64 之间")
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	@Length(min=0, max=64, message="工厂id长度必须介于 0 和 64 之间")
+	public String getFactoryid() {
+		return factoryid;
+	}
+
+	public void setFactoryid(String factoryid) {
+		this.factoryid = factoryid;
+	}
+	
+	@Length(min=0, max=255, message="生产线号长度必须介于 0 和 255 之间")
+	public String getLinecode() {
+		return linecode;
+	}
+
+	public void setLinecode(String linecode) {
+		this.linecode = linecode;
+	}
+	
+	@Length(min=0, max=255, message="任务批号长度必须介于 0 和 255 之间")
+	public String getBatchCode() {
+		return batchCode;
+	}
+
+	public void setBatchCode(String batchCode) {
+		this.batchCode = batchCode;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getPackDate() {
+		return packDate;
+	}
+
+	public void setPackDate(Date packDate) {
+		this.packDate = packDate;
+	}
+	
+	@Length(min=0, max=64, message="计划产量长度必须介于 0 和 64 之间")
+	public String getExpectqty() {
+		return expectqty;
+	}
+
+	public void setExpectqty(String expectqty) {
+		this.expectqty = expectqty;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getBeginTime() {
+		return beginTime;
+	}
+
+	public void setBeginTime(Date beginTime) {
+		this.beginTime = beginTime;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	public Date getValidperiod() {
+		return validperiod;
+	}
+
+	public void setValidperiod(Date validperiod) {
+		this.validperiod = validperiod;
+	}
+	
+	@Length(min=0, max=1, message="状态长度必须介于 0 和 1 之间")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	@Length(min=0, max=11, message="任务类型长度必须介于 0 和 11 之间")
+	public String getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(String taskType) {
+		this.taskType = taskType;
+	}
+	
+	@Length(min=0, max=11, message="范围1长度必须介于 0 和 11 之间")
+	public String getRangOne() {
+		return rangOne;
+	}
+
+	public void setRangOne(String rangOne) {
+		this.rangOne = rangOne;
+	}
+	
+	@Length(min=0, max=11, message="范围2长度必须介于 0 和 11 之间")
+	public String getRangTwo() {
+		return rangTwo;
+	}
+
+	public void setRangTwo(String rangTwo) {
+		this.rangTwo = rangTwo;
+	}
+	
+	@Length(min=0, max=11, message="范围3长度必须介于 0 和 11 之间")
+	public String getRangThree() {
+		return rangThree;
+	}
+
+	public void setRangThree(String rangThree) {
+		this.rangThree = rangThree;
+	}
+	
+	@Length(min=0, max=64, message="保证长度必须介于 0 和 64 之间")
+	public String getWarranty() {
+		return warranty;
+	}
+
+	public void setWarranty(String warranty) {
+		this.warranty = warranty;
+	}
+	
+	@Length(min=0, max=11, message="attr1长度必须介于 0 和 11 之间")
+	public String getAttr1() {
+		return attr1;
+	}
+
+	public void setAttr1(String attr1) {
+		this.attr1 = attr1;
+	}
+	
+	@Length(min=0, max=11, message="attr2长度必须介于 0 和 11 之间")
+	public String getAttr2() {
+		return attr2;
+	}
+
+	public void setAttr2(String attr2) {
+		this.attr2 = attr2;
+	}
+	
+	@Length(min=0, max=11, message="attr3长度必须介于 0 和 11 之间")
+	public String getAttr3() {
+		return attr3;
+	}
+
+	public void setAttr3(String attr3) {
+		this.attr3 = attr3;
+	}
+	
+	@Length(min=0, max=11, message="attr4长度必须介于 0 和 11 之间")
+	public String getAttr4() {
+		return attr4;
+	}
+
+	public void setAttr4(String attr4) {
+		this.attr4 = attr4;
+	}
+	
+	@Length(min=0, max=11, message="attr5长度必须介于 0 和 11 之间")
+	public String getAttr5() {
+		return attr5;
+	}
+
+	public void setAttr5(String attr5) {
+		this.attr5 = attr5;
+	}
+	
+	@Length(min=0, max=64, message="库存物料id长度必须介于 0 和 64 之间")
+	public String getInventorymaterialid() {
+		return inventorymaterialid;
+	}
+
+	public void setInventorymaterialid(String inventorymaterialid) {
+		this.inventorymaterialid = inventorymaterialid;
+	}
+	
+	@Length(min=0, max=64, message="计划箱产量长度必须介于 0 和 64 之间")
+	public String getExpectctnqty() {
+		return expectctnqty;
+	}
+
+	public void setExpectctnqty(String expectctnqty) {
+		this.expectctnqty = expectctnqty;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPcode() {
+		return pcode;
+	}
+
+	public void setPcode(String pcode) {
+		this.pcode = pcode;
+	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
+	}
+	
+	
+	
+}

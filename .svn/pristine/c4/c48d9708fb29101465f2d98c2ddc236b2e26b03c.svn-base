@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.test_audit.dao.Test_auditDao">
+    
+	<sql id="test_auditColumns">
+		a.id AS "id",
+		a.proc_ins_id AS "procInsId",
+		a.user_id AS "user.id",
+		a.office_id AS "office.id",
+		a.post AS "post",
+		a.age AS "age",
+		a.edu AS "edu",
+		a.content AS "content",
+		a.olda AS "olda",
+		a.oldb AS "oldb",
+		a.oldc AS "oldc",
+		a.newa AS "newa",
+		a.newb AS "newb",
+		a.newc AS "newc",
+		a.add_num AS "addNum",
+		a.exe_date AS "exeDate",
+		a.hr_text AS "hrText",
+		a.lead_text AS "leadText",
+		a.main_lead_text AS "mainLeadText",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		u3.name AS "user.name",
+		o4.name AS "office.name"
+	</sql>
+	
+	<sql id="test_auditJoins">
+		LEFT JOIN sys_user u3 ON u3.id = a.user_id
+		LEFT JOIN sys_office o4 ON o4.id = a.office_id
+	</sql>
+    
+	<select id="get" resultType="Test_audit">
+		SELECT 
+			<include refid="test_auditColumns"/>
+		FROM oa_test_audit a
+		<include refid="test_auditJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Test_audit">
+		SELECT 
+			<include refid="test_auditColumns"/>
+		FROM oa_test_audit a
+		<include refid="test_auditJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="id != null and id != ''">
+				AND a.id = #{id}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office_id = #{office.id}
+			</if>
+			<if test="edu != null and edu != ''">
+				AND a.edu &gt;= #{edu}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Test_audit">
+		SELECT 
+			<include refid="test_auditColumns"/>
+		FROM oa_test_audit a
+		<include refid="test_auditJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO oa_test_audit(
+			id,
+			proc_ins_id,
+			user_id,
+			office_id,
+			post,
+			age,
+			edu,
+			content,
+			olda,
+			oldb,
+			oldc,
+			newa,
+			newb,
+			newc,
+			add_num,
+			exe_date,
+			hr_text,
+			lead_text,
+			main_lead_text,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{procInsId},
+			#{user.id},
+			#{office.id},
+			#{post},
+			#{age},
+			#{edu},
+			#{content},
+			#{olda},
+			#{oldb},
+			#{oldc},
+			#{newa},
+			#{newb},
+			#{newc},
+			#{addNum},
+			#{exeDate},
+			#{hrText},
+			#{leadText},
+			#{mainLeadText},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE oa_test_audit SET 	
+			proc_ins_id = #{procInsId},
+			user_id = #{user.id},
+			office_id = #{office.id},
+			post = #{post},
+			age = #{age},
+			edu = #{edu},
+			content = #{content},
+			olda = #{olda},
+			oldb = #{oldb},
+			oldc = #{oldc},
+			newa = #{newa},
+			newb = #{newb},
+			newc = #{newc},
+			add_num = #{addNum},
+			exe_date = #{exeDate},
+			hr_text = #{hrText},
+			lead_text = #{leadText},
+			main_lead_text = #{mainLeadText},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE oa_test_audit SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

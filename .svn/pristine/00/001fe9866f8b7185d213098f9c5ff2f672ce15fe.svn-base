@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.RdcReturnDetailDao">
+
+
+	<select id="get" resultType="RdcReturnDetail">
+		 SELECT 
+		  rh.`order_code` AS orderCode,
+		  rh.`submit_date` AS submitDate,
+		  rh.`return_code` AS returnCode,
+		  rh.`return_name` AS returnName,
+		  rh.`receive_id` AS receiveId,
+		  rh.`receive_phone` AS receivePhone,
+		  rh.`receive_address` AS receiveAddress,
+		  p.`code` AS pCode,
+		  p.`name` AS pName,
+		  rd.`expect_pcs_qty` AS expectPcsQty,
+		  rd.`actual_pcs_qty` AS actualPcsQty
+		FROM
+		  rdc_return_header rh,
+		  rdc_return_detail rd,
+		  product p 
+			WHERE rh.`id` = rd.`header_id` 
+  			  AND rd.`product_id` = p.`id` 
+			  AND rh.id=#{id}
+	</select>
+
+	 <select id="findList" resultType="RdcReturnDetail">
+		   SELECT 
+		  rh.`order_code` AS orderCode,
+		  rh.`submit_date` AS submitDate,
+		  rh.`return_code` AS returnCode,
+		  rh.`return_name` AS returnName,
+		  rh.`receive_id` AS receiveId,
+		  rh.`receive_phone` AS receivePhone,
+		  rh.`receive_address` AS receiveAddress,
+		  p.`code` AS pCode,
+		  p.`name` AS pName,
+		  rd.`expect_pcs_qty` AS expectPcsQty,
+		  rd.`actual_pcs_qty` AS actualPcsQty
+		FROM
+		  rdc_return_header rh
+		LEFT JOIN rdc_return_detail rd ON  rh.`id` = rd.`header_id` 
+		LEFT JOIN product p ON rd.`product_id` = p.`id`
+		<where>
+			<if test="orderCode != null and orderCode != ''">
+				 rh.order_code LIKE 
+					<if test="dbName == 'mysql'">concat('%',#{orderCode},'%')</if>
+			</if>
+			<if test="returnCode != null and returnCode != ''">
+				AND rh.return_code = #{returnCode}
+			</if>
+			<if test="beginSubmitDate != null and endSubmitDate != null and beginSubmitDate != '' and endSubmitDate != ''">
+				AND  rh.submit_date BETWEEN #{beginSubmitDate} AND #{endSubmitDate}
+			</if>
+			<if test="returnName != null and returnName != ''">
+				AND rh.return_name LIKE 
+					<if test="dbName == 'mysql'">concat('%',#{returnName},'%')</if>
+			</if>
+			<if test="pCode != null and pCode != ''">
+				AND p.code LIKE 
+					<if test="dbName == 'mysql'">concat('%',#{pCode},'%')</if>
+			</if>
+			<if test="pName != null and pName != ''">
+					AND  p.name LIKE 
+						<if test="dbName == 'mysql'">concat('%',#{pName},'%')</if>
+				</if>
+		</where>
+	<!-- 	group by rh.id -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY  rh.submit_date DESC
+			</otherwise>
+		</choose>
+	</select> 
+<update id="truncate">
+		delete from rdc_return_detail
+	</update>
+</mapper>

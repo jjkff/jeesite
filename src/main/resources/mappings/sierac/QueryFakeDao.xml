@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.QueryFakeDao">
+
+	 <select id="findList" resultType="QueryFake">
+		SELECT 
+		  cd.`code` AS cCode,
+		  p.`code` AS pCode,
+		  p.`name` AS pName,
+		  p.`shelf_life` AS shelfLife,
+		   p.`spec` AS spec,
+		  cd.`batch_code` AS batchCode,
+		  cd.`pack_date` AS packDate,
+		  cd.`valid_period` AS validPeriod,
+		  rh.`scan_begin_time` AS scanBeginTimeDate,
+		  rh.`submit_date` AS sumbitDate,
+		  rh.`order_code` AS orderCode,
+		  rh.`send_name` AS sendName,
+		  rh.`receive_name` receiveName,
+		  rh.`receive_phone` AS receivePhone,
+		  rh.`receive_address` AS receiveAddress 
+		FROM
+		  code_data cd,
+		  product p,
+		  rdc_out_header rh 
+		<where>
+			cd.`product_id` = p.`id` 
+  			AND cd.`out_header_id` = rh.`id` 
+			<if test="cCode != null and cCode != ''">
+				AND  cd.`code` = #{cCode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY  cd.`code` DESC
+			</otherwise>
+		</choose>
+	</select> 
+<select id="get" resultType="QueryFake">
+		SELECT 
+		  cd.`code` AS cCode,
+		  p.`code` AS pCode,
+		  p.`name` AS pName,
+		  cd.`batch_code` AS batchCode,
+		  cd.`pack_date` AS packDate,
+		  rh.`scan_begin_time` AS scanBeginTimeDate,
+		  rh.`submit_date` AS sumbitDate,
+		  rh.`order_code` AS orderCode,
+		  rh.`send_name` AS sendName,
+		  rh.`receive_name` receiveName,
+		  rh.`receive_phone` AS receivePhone,
+		  rh.`receive_address` AS receiveAddress 
+		FROM
+		  code_data cd,
+		  product p,
+		  rdc_out_header rh 
+		  where
+		cd.`product_id` = p.`id` 
+  			AND cd.`out_header_id` = rh.`id` 
+  			<if test="cCode != null and cCode != ''">
+				AND  cd.`code` = #{cCode}
+			</if>
+	</select>
+</mapper>

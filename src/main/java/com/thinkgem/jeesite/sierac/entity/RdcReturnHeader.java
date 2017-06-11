@@ -1,0 +1,265 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.sierac.entity;
+
+import java.util.Date;
+
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+
+/**
+ * CRUD操作Entity
+ * 
+ * @author mjj
+ * @version 2017-02-14
+ */
+public class RdcReturnHeader extends DataEntity<RdcReturnHeader> {
+
+    private static final long serialVersionUID = 1L;
+
+    private String code; // 业务代码
+
+    @NotNull(message = "退货单号不能为空")
+    @Length(min = 3, max = 10, message = "退货单号长度必须介于 3 和 10 之间")
+    private String orderCode; // 退货单号
+
+    private String updateId; // 上传id
+
+    private Date updateTime; // 上传日期
+
+    private String scanBy; // 扫描者
+
+    private Date scanTime; // 开始扫描时间
+
+    private Integer billType; // 单据类型
+
+    private String billStatus; // 单据状态
+
+    private String submitBy; // 提交者
+
+    @NotNull(message = "退货日期不能为空")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date submitDate; // 退货日期
+
+    private String returnId; // 退货仓id
+
+    private String returnCode;// 退货仓代码
+
+    @NotNull(message = "退货仓名称不能为空")
+    private String returnName; // 退货仓名称
+
+    @NotNull(message = "收货仓id不能为空")
+    private String receiveId; // 收货仓id
+
+    @NotNull(message = "收货仓手机号不能为空")
+    private String receivePhone; // 收货仓手机号
+
+    @NotNull(message = "收货仓不能为空")
+    private String receiveAddress; // 收货仓地址
+
+    private Date beginUpdateTime; // 开始 退货日期
+
+    private Date endUpdateTime; // 结束 退货日期
+
+    public RdcReturnHeader() {
+        super();
+    }
+
+    public RdcReturnHeader(String id) {
+        super(id);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @ExcelField(title = "退货单号", align = 2, sort = 1)
+    // @Length(min = 0, max = 64, message = "单据号码长度必须介于 0 和 64 之间")
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    // @Length(min = 0, max = 64, message = "上传id长度必须介于 0 和 64 之间")
+    public String getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(String updateId) {
+        this.updateId = updateId;
+    }
+
+    @ExcelField(title = "上传日期", align = 2, sort = 9)
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    // @Length(min = 0, max = 64, message = "扫描者长度必须介于 0 和 64 之间")
+    public String getScanBy() {
+        return scanBy;
+    }
+
+    public void setScanBy(String scanBy) {
+        this.scanBy = scanBy;
+    }
+
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @ExcelField(title = "开始扫描时间", align = 2, sort = 8)
+    @NotNull(message = "扫描时间不能为空")
+    public Date getScanTime() {
+        return scanTime;
+    }
+
+    public void setScanTime(Date scanTime) {
+        this.scanTime = scanTime;
+    }
+
+    public Integer getBillType() {
+        return billType;
+    }
+
+    public void setBillType(Integer billType) {
+        this.billType = billType;
+    }
+
+    @NotNull(message = "单据状态不能为空")
+    @ExcelField(title = "单据状态", align = 2, sort = 10)
+    public String getBillStatus() {
+        return billStatus;
+    }
+
+    public void setBillStatus(String billStatus) {
+        this.billStatus = billStatus;
+    }
+
+    public String getSubmitBy() {
+        return submitBy;
+    }
+
+    public void setSubmitBy(String submitBy) {
+        this.submitBy = submitBy;
+    }
+
+    @ExcelField(title = "退货日期", align = 2, sort = 2)
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date getSubmitDate() {
+        return submitDate;
+    }
+
+    public void setSubmitDate(Date submitDate) {
+        this.submitDate = submitDate;
+    }
+
+    // @Length(min = 0, max = 64, message = "退货仓id长度必须介于 0 和 64 之间")
+    public String getReturnId() {
+        return returnId;
+    }
+
+    public void setReturnId(String returnId) {
+        this.returnId = returnId;
+    }
+
+    // @Length(min = 0, max = 64, message = "退货仓代码长度必须介于 0 和 64 之间")
+    @ExcelField(title = "退货仓代码", align = 2, sort = 3)
+    public String getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(String returnCode) {
+        this.returnCode = returnCode;
+    }
+
+    // @Length(min = 0, max = 64, message = "退货仓名称长度必须介于 0 和 64 之间")
+    @ExcelField(title = "退货仓名称", align = 2, sort = 4)
+    public String getReturnName() {
+        return returnName;
+    }
+
+    public void setReturnName(String returnName) {
+        this.returnName = returnName;
+    }
+
+    // @Length(min = 0, max = 64, message = "收货仓id长度必须介于 0 和 64 之间")
+    @ExcelField(title = "收货仓id", align = 2, sort = 5)
+    public String getReceiveId() {
+        return receiveId;
+    }
+
+    public void setReceiveId(String receiveId) {
+        this.receiveId = receiveId;
+    }
+
+    // @Length(min = 0, max = 64, message = "收货仓手机号长度必须介于 0 和 64 之间")
+    @ExcelField(title = "收货仓电话", align = 2, sort = 6)
+    public String getReceivePhone() {
+        return receivePhone;
+    }
+
+    public void setReceivePhone(String receivePhone) {
+        this.receivePhone = receivePhone;
+    }
+
+    @Length(min = 0, max = 64, message = "收货仓地址长度必须介于 0 和 64 之间")
+    @ExcelField(title = "收货仓地址", align = 2, sort = 7)
+    public String getReceiveAddress() {
+        return receiveAddress;
+    }
+
+    public void setReceiveAddress(String receiveAddress) {
+        this.receiveAddress = receiveAddress;
+    }
+
+    public Date getBeginUpdateTime() {
+        return beginUpdateTime;
+    }
+
+    public void setBeginUpdateTime(Date beginUpdateTime) {
+        this.beginUpdateTime = beginUpdateTime;
+    }
+
+    public Date getEndUpdateTime() {
+        return endUpdateTime;
+    }
+
+    public void setEndUpdateTime(Date endUpdateTime) {
+        this.endUpdateTime = endUpdateTime;
+    }
+
+    // @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public Date getUpdate() {
+        return super.updateDate;
+    }
+
+    public String getRemarks() {
+        return super.remarks;
+    }
+
+    @Override
+    public String toString() {
+        return "RdcReturnHeader [code=" + code + ", orderCode=" + orderCode + ", updateId=" + updateId
+                + ", updateTime=" + updateTime + ", scanBy=" + scanBy + ", scanTime=" + scanTime + ", billType="
+                + billType + ", billStatus=" + billStatus + ", submitBy=" + submitBy + ", submitDate=" + submitDate
+                + ", returnId=" + returnId + ", returnCode=" + returnCode + ", returnName=" + returnName
+                + ", receiveId=" + receiveId + ", receivePhone=" + receivePhone + ", receiveAddress=" + receiveAddress
+                + ", beginUpdateTime=" + beginUpdateTime + ", endUpdateTime=" + endUpdateTime + "]";
+    }
+
+}

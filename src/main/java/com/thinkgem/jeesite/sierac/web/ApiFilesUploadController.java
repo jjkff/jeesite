@@ -1,0 +1,276 @@
+package com.thinkgem.jeesite.sierac.web;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.thinkgem.jeesite.common.mapper.JsonMapper;
+import com.thinkgem.jeesite.common.utils.FileUtils;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.sierac.entity.ApiData;
+import com.thinkgem.jeesite.sierac.entity.ApiFilesUpload;
+import com.thinkgem.jeesite.sierac.entity.CodeData;
+import com.thinkgem.jeesite.sierac.entity.Product;
+import com.thinkgem.jeesite.sierac.service.ApiDataService;
+import com.thinkgem.jeesite.sierac.service.CodeDataService;
+import com.thinkgem.jeesite.sierac.service.ProductService;
+
+/**
+ 1、.net那边发送压缩文件过来；
+ 2、Java端接收压缩文件，并上传到服务器；
+ 3、在服务器解压缩文件；
+ 4、对接压缩后的文件做crud操作；
+ 5、删除服务器里解压之后的文件夹，仅保留压缩文件
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/api/v1")
+//@RequestMapping(value = "${adminPath}/sierac/api")
+public class ApiFilesUploadController extends BaseController {
+    @Autowired
+    private CodeDataService codeDataService;
+
+    @Autowired
+    private ProductService productService;
+
+    @Autowired
+    private ApiDataService apiDataService;
+
+    private JsonMapper JsonMapper;
+
+    /**
+     * 
+     * Description: 文件上传<br/>
+     * 产品管理数据到生产数据
+     * @author mjj
+     * @param request
+     * @param response
+     * @return string
+     * @throws IOException
+     */
+    @SuppressWarnings("static-access")
+    @RequestMapping(value = "/files/upload", method = RequestMethod.POST, headers = { "Accept=application/json" })
+    @ResponseBody
+    public String put(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // if (ValidateToken.isToken(request, response)) {
+        InputStream inputStream = request.getInputStream(); //.net发送压缩文件
+        ApiFilesUpload apiFilesUpload = new ApiFilesUpload();
+        if (inputStream != null) { //在服务器创建路径文件夹
+            /**
+             * 创建压缩包存储路径
+             */
+            String descFileName = request.getSession().getServletContext().getRealPath("/") + "uploadFiles" + "\\";
+            // String descFileName = "D:\\test\\";
+            FileUtils fileutil = new FileUtils();
+            fileutil.createDirectory(descFileName);//创建目录
+            /**
+             * 指定文件名
+             */
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");// 时间来命名
+            String ymd = sdf.format(new Date());
+            String uid = UUID.randomUUID().toString();// UUID来命名
+            String fileName = uid + ".zip";
+            String zipFileName = descFileName + fileName; //压缩吧名=目录名+文件名
+            descFileName = descFileName + ymd;
+            /**
+             * 写文件
+             */
+            File file = new File(zipFileName);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) > 0) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+            outputStream.flush();
+            outputStream.close();
+            //至此将.net文件写到服务器。
+            //下面在服务器端解压缩
+
+            /**
+             * 解压文件
+             */
+            File jyFile = new File(descFileName);
+            if (!jyFile.exists())
+                jyFile.mkdirs();
+            fileutil.unZipFiles(zipFileName, descFileName);
+            /**
+             * 获取文件夹下的文件
+             */
+            File f = null;
+            f = new File(descFileName);
+            File[] files = f.listFiles(); // 得到f文件夹下面的所有文件。
+            List<File> listFile = new ArrayList<File>();
+            String errorMsg = "";
+            int successQty = 0;
+            if (files.length != 0) {
+                for (File fileDemo : files) {
+                    ApiData apiData = new ApiData();
+                    List<ApiData> data = new ArrayList<ApiData>();
+                    listFile.add(fileDemo);
+                    /**
+                     * 写入数据库
+                     */
+                    String filePath = fileDemo.getAbsolutePath();
+                    System.out.println("----------------" + filePath);
+                    errorMsg = readTxtFile(filePath);
+                    successQty++;
+                    // fileutil.delFile(filePath);// 删除文件
+                    fileutil.delFile(descFileName);
+                    apiFilesUpload.setCode("0");
+                    apiData.setSuccessQty(successQty);
+                    apiData.setUploadId(UUID.randomUUID().toString());
+                    apiDataService.save(apiData);
+                    data.add(apiData);
+                    apiFilesUpload.setData(data);
+                }
+            } else {
+                apiFilesUpload.setCode("1");
+                errorMsg = "文件夹为空";
+                System.out.println("文件夹为空");
+            }
+            apiFilesUpload.setErrorMsg(errorMsg);
+            // }
+            return JsonMapper.getInstance().toJson(apiFilesUpload);
+        }
+        response.setStatus(403);
+        return "error/403";
+    }
+
+    public String readTxtFile(String filePath) {
+        String errorMsg = "写入数据库成功";
+        try {
+            String encoding = "GBK";
+            File file = new File(filePath);
+            if (file.isFile() && file.exists()) { // 判断文件是否存在
+                InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt = null;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    System.out.println(lineTxt);
+                    String demo[] = lineTxt.split(",");
+                    CodeData codedata = new CodeData();
+                    for (int i = 0; i < demo.length; i++) {
+                        if (i == 0) {
+                            codedata.setCode(demo[i]);
+                            continue;
+                        }
+                        if (i == 1) {
+                            codedata.setEptCode(demo[i]);
+                            continue;
+                        }
+                        if (i == 4) {
+//                            codedata.setId(demo[4]);
+//                            String str = "";
+//                            Product product = new Product();
+//                            product = productService.findByCode(demo[i]);
+//                            if (product != null) {
+//                                str = product.getId();
+//                                codedata.setProductId(str);
+//                            }
+                            continue;
+                        }
+                        if (i == 6) {
+                            codedata.setBatchCode(demo[i]);
+                            continue;
+                        }
+                        if (i == 9) {
+                            codedata.setPackDate(sdf.parse(demo[i]));
+                            continue;
+                        }
+                        if (i == 10) {
+                            codedata.setValidPeriod(sdf.parse(demo[i]));
+                            continue;
+                        }
+                        if (i == 11) {
+                            codedata.setPrintDate(sdf.parse(demo[i]));
+                            continue;
+                        }
+                        if (i == 12) {
+                            codedata.setLineCode(demo[i]);
+                            continue;
+                        }
+                        if (i == 15) {
+                            codedata.setTeamCode(demo[i]);
+                            continue;
+                        }
+                        if (i == 16) {
+                            codedata.setWorkerCode(demo[i]);
+                            continue;
+                        }
+                    }
+//                    if (codedata.getId() != null)
+                        codeDataService.save(codedata);
+                }
+                bufferedReader.close();
+                read.close();
+            } else {
+                errorMsg = "找不到指定的文件";
+                System.out.println("找不到指定的文件");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            errorMsg = "写入数据库失败";
+            System.out.println("写入数据库失败");
+        }
+        return errorMsg;
+    }
+
+    /**
+     * 写文件方法
+     */
+    public static String readTxtFileIntoStringArrList(String filePath, String tempPath) {
+        List<String> list = new ArrayList<String>();
+        int count = 0;
+        int num = 0;
+        String truePath = null;
+        String dicName = null;
+        try {
+            String encoding = "GBK";
+            File file = new File(filePath);
+            if (file.isFile() && file.exists()) { // 判断文件是否存在
+                InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);// 考虑到编码格式
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt = null;
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    if (count == 2) {
+                        dicName = lineTxt.substring(52, 85);
+                        truePath = tempPath + dicName + ".zip";
+                    }
+                    // if (count >= 5)
+                    list.add(lineTxt);
+                    count++;
+                }
+                System.out.println("count=" + count + "list的大小:" + list.size());
+                bufferedReader.close();
+                read.close();
+            } else {
+                System.out.println("找不到指定的文件");
+            }
+        } catch (Exception e) {
+            System.out.println("读取文件内容出错");
+            e.printStackTrace();
+        }
+        return dicName;
+        // return list;
+    }
+
+}

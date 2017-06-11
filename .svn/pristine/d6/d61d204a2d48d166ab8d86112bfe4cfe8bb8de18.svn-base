@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.ApiWarehouseOutScanCheckDao">
+	<select id="findAll" resultType="ApiWarehouseOutScanCheck">
+		SELECT 
+		  cd.`code` AS cDe,
+		  rh.`order_code` AS orderCode,
+		  cd.`ctn_code` AS ctnCode,
+		  cd.`batch_code` AS batchCode,
+		  cd.`product_id` AS productId,
+		  p.`name` AS productName 
+		FROM
+		  `code_data` cd,
+		  `rdc_out_header` rh,
+		  product p 
+		WHERE cd.`product_id` = p.`id` 
+		  AND cd.`code` = #{cDe} 
+		  AND rh.`order_code` = #{orderCode}
+	</select>
+</mapper>

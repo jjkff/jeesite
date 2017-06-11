@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="app_preset_prof_preset_name">TestThread Launch Configuration</entry>
+<entry key="app_preset_prof_preset_filter_s"/>
+<entry key="app_preset_prof_preset_filter_p">com.thinkgem.jeesite.common.annotation.*,
+com.thinkgem.jeesite.common.beanvalidator.*,
+com.thinkgem.jeesite.common.config.*,
+com.thinkgem.jeesite.common.filter.*,
+com.thinkgem.jeesite.common.mapper.*,
+com.thinkgem.jeesite.common.persistence.*,
+com.thinkgem.jeesite.common.security.*,
+com.thinkgem.jeesite.common.service.*,
+com.thinkgem.jeesite.common.servlet.*,
+com.thinkgem.jeesite.common.supcan.*,
+com.thinkgem.jeesite.common.test.*,
+com.thinkgem.jeesite.common.utils.*,
+com.thinkgem.jeesite.common.web.*,
+com.thinkgem.jeesite.common.xstream.*,
+com.thinkgem.jeesite.modules.act.dao.*,
+com.thinkgem.jeesite.modules.act.entity.*,
+com.thinkgem.jeesite.modules.act.rest.diagram.services.*,
+com.thinkgem.jeesite.modules.act.rest.editor.main.*,
+com.thinkgem.jeesite.modules.act.rest.editor.model.*,
+com.thinkgem.jeesite.modules.act.rest.servlet.*,
+com.thinkgem.jeesite.modules.act.service.*,
+com.thinkgem.jeesite.modules.act.utils.*,
+com.thinkgem.jeesite.modules.act.web.*,
+com.thinkgem.jeesite.modules.cms.dao.*,
+com.thinkgem.jeesite.modules.cms.entity.*,
+com.thinkgem.jeesite.modules.cms.service.*,
+com.thinkgem.jeesite.modules.cms.utils.*,
+com.thinkgem.jeesite.modules.cms.web.*,
+com.thinkgem.jeesite.modules.gen.dao.*,
+com.thinkgem.jeesite.modules.gen.entity.*,
+com.thinkgem.jeesite.modules.gen.service.*,
+com.thinkgem.jeesite.modules.gen.util.*,
+com.thinkgem.jeesite.modules.gen.web.*,
+com.thinkgem.jeesite.modules.oa.dao.*,
+com.thinkgem.jeesite.modules.oa.entity.*,
+com.thinkgem.jeesite.modules.oa.service.*,
+com.thinkgem.jeesite.modules.oa.web.*,
+com.thinkgem.jeesite.modules.sys.dao.*,
+com.thinkgem.jeesite.modules.sys.entity.*,
+com.thinkgem.jeesite.modules.sys.interceptor.*,
+com.thinkgem.jeesite.modules.sys.listener.*,
+com.thinkgem.jeesite.modules.sys.security.*,
+com.thinkgem.jeesite.modules.sys.service.*,
+com.thinkgem.jeesite.modules.sys.utils.*,
+com.thinkgem.jeesite.modules.sys.web.*,
+com.thinkgem.jeesite.modules.test.dao.*,
+com.thinkgem.jeesite.modules.test.entity.*,
+com.thinkgem.jeesite.modules.test.service.*,
+com.thinkgem.jeesite.modules.test.web.*,
+com.thinkgem.jeesite.modules.test_audit.dao.*,
+com.thinkgem.jeesite.modules.test_audit.entity.*,
+com.thinkgem.jeesite.modules.test_audit.service.*,
+com.thinkgem.jeesite.modules.test_audit.web.*,
+com.thinkgem.jeesite.sierac.dao.*,
+com.thinkgem.jeesite.sierac.entity.*,
+com.thinkgem.jeesite.sierac.service.*,
+com.thinkgem.jeesite.sierac.unitTest.*,
+com.thinkgem.jeesite.sierac.web.*,
+com.thinkgem.jeesite.test.*,
+com.thinkgem.jeesite.tools.*,
+org.activiti.editor.language.json.converter.*,
+org.apache.ibatis.builder.xml.*,
+org.apache.ibatis.session.*,
+org.apache.ibatis.thread.*,
+org.mybatis.spring.*</entry>
+<entry key="app_preset_prof_preset_alloc_p">10</entry>
+<entry key="app_preset_"/>
+<entry key="app_preset_prof_preset_samplingRefreshRate_s">1000</entry>
+<entry key="app_preset_prof_preset_stacks_p">false</entry>
+<entry key="app_preset_prof_preset_roots_p">com.thinkgem.jeesite.common.annotation.**
+com.thinkgem.jeesite.common.beanvalidator.**
+com.thinkgem.jeesite.common.config.**
+com.thinkgem.jeesite.common.filter.**
+com.thinkgem.jeesite.common.mapper.**
+com.thinkgem.jeesite.common.persistence.**
+com.thinkgem.jeesite.common.security.**
+com.thinkgem.jeesite.common.service.**
+com.thinkgem.jeesite.common.servlet.**
+com.thinkgem.jeesite.common.supcan.**
+com.thinkgem.jeesite.common.test.**
+com.thinkgem.jeesite.common.utils.**
+com.thinkgem.jeesite.common.web.**
+com.thinkgem.jeesite.common.xstream.**
+com.thinkgem.jeesite.modules.act.dao.**
+com.thinkgem.jeesite.modules.act.entity.**
+com.thinkgem.jeesite.modules.act.rest.diagram.services.**
+com.thinkgem.jeesite.modules.act.rest.editor.main.**
+com.thinkgem.jeesite.modules.act.rest.editor.model.**
+com.thinkgem.jeesite.modules.act.rest.servlet.**
+com.thinkgem.jeesite.modules.act.service.**
+com.thinkgem.jeesite.modules.act.utils.**
+com.thinkgem.jeesite.modules.act.web.**
+com.thinkgem.jeesite.modules.cms.dao.**
+com.thinkgem.jeesite.modules.cms.entity.**
+com.thinkgem.jeesite.modules.cms.service.**
+com.thinkgem.jeesite.modules.cms.utils.**
+com.thinkgem.jeesite.modules.cms.web.**
+com.thinkgem.jeesite.modules.gen.dao.**
+com.thinkgem.jeesite.modules.gen.entity.**
+com.thinkgem.jeesite.modules.gen.service.**
+com.thinkgem.jeesite.modules.gen.util.**
+com.thinkgem.jeesite.modules.gen.web.**
+com.thinkgem.jeesite.modules.oa.dao.**
+com.thinkgem.jeesite.modules.oa.entity.**
+com.thinkgem.jeesite.modules.oa.service.**
+com.thinkgem.jeesite.modules.oa.web.**
+com.thinkgem.jeesite.modules.sys.dao.**
+com.thinkgem.jeesite.modules.sys.entity.**
+com.thinkgem.jeesite.modules.sys.interceptor.**
+com.thinkgem.jeesite.modules.sys.listener.**
+com.thinkgem.jeesite.modules.sys.security.**
+com.thinkgem.jeesite.modules.sys.service.**
+com.thinkgem.jeesite.modules.sys.utils.**
+com.thinkgem.jeesite.modules.sys.web.**
+com.thinkgem.jeesite.modules.test.dao.**
+com.thinkgem.jeesite.modules.test.entity.**
+com.thinkgem.jeesite.modules.test.service.**
+com.thinkgem.jeesite.modules.test.web.**
+com.thinkgem.jeesite.modules.test_audit.dao.**
+com.thinkgem.jeesite.modules.test_audit.entity.**
+com.thinkgem.jeesite.modules.test_audit.service.**
+com.thinkgem.jeesite.modules.test_audit.web.**
+com.thinkgem.jeesite.sierac.dao.**
+com.thinkgem.jeesite.sierac.entity.**
+com.thinkgem.jeesite.sierac.service.**
+com.thinkgem.jeesite.sierac.unitTest.**
+com.thinkgem.jeesite.sierac.web.**
+com.thinkgem.jeesite.test.**
+com.thinkgem.jeesite.tools.**
+org.activiti.editor.language.json.converter.**
+org.apache.ibatis.builder.xml.**
+org.apache.ibatis.session.**
+org.apache.ibatis.thread.**
+org.mybatis.spring.**
+</entry>
+<entry key="profiler.settings.instrument.empty.methods">false</entry>
+<entry key="myeclipse.profiling.mode">0</entry>
+<entry key="profiler.settings.istrument.getter.setter.methods">false</entry>
+<entry key="app_preset_prof_preset_samplingRate_s">100</entry>
+<entry key="app_preset_prof_preset_filterMode_s">true</entry>
+<entry key="app_preset_prof_preset_selector"/>
+<entry key="app_preset_prof_preset_refreshRate_s">1000</entry>
+<entry key="app_preset_prof_preset_runnables_p">true</entry>
+<entry key="app_preset_prof_preset_filterMode_p">false</entry>
+<entry key="app_preset_prof_preset_memoryMode_p">true</entry>
+</properties>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.CodeDataDao">
+	<sql id="codeDataColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.ept_code AS "eptCode",
+		a.ctn_code AS "ctnCode",
+		a.plt_code AS "pltCode",
+		a.line_code AS "lineCode",
+		a.batch_code AS "batchCode",
+		a.pack_date AS "packDate",
+		a.valid_period AS "validPeriod",
+		a.print_date AS "printDate",
+		a.worker_code AS "workerCode",
+		a.team_code AS "teamCode",
+		a.active AS "active",
+		a.origin_id AS "originId",
+		a.current_location AS "currentLocation",
+		a.is_tracked AS "isTracked",
+		p.code AS "pcode",
+		p.name AS "name",
+		a.product_id AS "productId",
+		a.factory_id AS "factoryId",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.out_header_id AS "outHeaderId"
+	</sql>
+	
+	<sql id="codeDataJoins">
+	</sql>
+    
+	<select id="get" resultType="CodeData">
+		SELECT 
+			<include refid="codeDataColumns"/>
+		FROM code_data a,product p
+		<include refid="codeDataJoins"/>
+		WHERE a.id = #{id}
+		AND a.product_id=p.id
+	</select>
+	
+	<select id="findList" resultType="CodeData">
+		SELECT
+			<include refid="codeDataColumns"/>
+		FROM code_data a,product p
+		<include refid="codeDataJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.product_id=p.id
+			<if test="code != null and code != ''">
+				AND a.code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND p.name LIKE
+
+
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="pcode != null and pcode != ''">
+			  AND p.code=#{pcode}
+			</if>
+			<if test="batchCode != null and batchCode != ''">
+			  AND a.batch_code=#{batchCode}
+			</if>
+			<if test="ctnCode != null and ctnCode != ''">
+			AND a.ctn_code=#{ctnCode}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="findAllList" resultType="CodeData">
+		SELECT 
+			<include refid="codeDataColumns"/>
+		FROM code_data a,product p
+		<include refid="codeDataJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.product_id=p.id
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	 <insert id="insert">
+		INSERT INTO code_data(
+		    id,
+			code,
+			ept_code,
+			ctn_code,
+			plt_code,
+			line_code,
+			batch_code,
+			pack_date,
+			valid_period,
+			print_date,
+			worker_code,
+			team_code,
+			product_id,
+			factory_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			out_header_id
+		) VALUES (
+		    #{id},
+			#{code},
+			#{eptCode},
+			#{ctnCode},
+			#{pltCode},
+			#{lineCode},
+			#{batchCode},
+			#{packDate},
+			#{validPeriod},
+			#{printDate},
+			#{workerCode},
+			#{teamCode},
+			#{productId},
+			#{factoryId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{outHeaderId}
+		)
+	</insert>
+	
+	<update id="updateAll">
+		UPDATE 
+		  `code_data` 
+		SET
+		  `out_header_id` =#{outHeaderId},
+		  `create_date` =#{createDate},
+		  `update_date` =#{updateDate}
+		WHERE `code` =#{scan_code} 
+	</update>
+
+	<update id="update">
+		UPDATE
+		`code_data`
+		SET
+		`code` =#{code},
+		`ept_code` =#{eptCode},
+		`ctn_code` =#{ctnCode},
+		`plt_code` =#{pltCode},
+		`line_code` =#{lineCode},
+		`batch_code` =#{batchCode},
+		`pack_date` =#{packDate},
+	    `valid_period` =#{validPeriod},
+		`print_date` =#{printDate},
+		`worker_code` =#{workerCode},
+		`team_code` =#{teamCode},
+		`active` =#{active},
+		`origin_id` =#{originId},
+	    `current_location` =#{currentLocation},
+		`is_tracked` =#{is_tracked},
+		`product_id` =#{productId},
+		`factory_id` =#{factoryId},
+		`create_by` =#{createBy},
+	    `create_date` =#{createDate},
+		`create_date` =#{createDate},
+		`update_by` =#{updateBy},
+		`update_date` =#{updateDate},
+	    `remarks` =#{remarks},
+		`del_flag` =#{delFlag},
+		`out_header_id` =#{outHeaderId},
+		VALUE
+		WHERE `id` =#{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE code_data SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	 <update id="truncate">
+		delete from code_data
+	</update>
+</mapper>

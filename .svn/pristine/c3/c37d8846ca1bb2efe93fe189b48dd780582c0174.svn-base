@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.RdcOutHeaderDao">
+    
+	<sql id="rdcOutHeaderColumns">
+		a.id AS "id",
+		a.code AS "code",
+		a.order_code AS "orderCode",
+		a.out_type_code AS "outTypeCode",
+		a.upload_id AS "uploadId",
+		a.upload_time AS "uploadTime",
+		a.scan_by AS "scanBy",
+		a.scan_begin_time AS "scanBeginTime",
+		a.bill_type AS "billType",
+		a.bill_status AS "billStatus",
+		a.submit_by AS "submitBy",
+		a.submit_date AS "submitDate",
+		a.send_id AS "sendId",
+		a.send_code AS "sendCode",
+		a.send_name AS "sendName",
+		a.receive_id AS "receiveId",
+		a.receive_name AS "receiveName",
+		a.receive_phone AS "receivePhone",
+		a.receive_address AS "receiveAddress",
+		a.expect_pcs_qty as expectPcsPty,
+		a.actual_pcs_qty as actualPcsPty,
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="rdcOutHeaderJoins">
+	</sql>
+    
+	<select id="get" resultType="RdcOutHeader">
+		SELECT 
+			<include refid="rdcOutHeaderColumns"/>
+		FROM rdc_out_header a
+		<include refid="rdcOutHeaderJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="RdcOutHeader">
+		SELECT 
+			<include refid="rdcOutHeaderColumns"/>
+		FROM rdc_out_header a
+		LEFT JOIN
+		code_data c
+		ON
+		c.out_header_id = a.id
+		<include refid="rdcOutHeaderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			
+			<if test="orderCode != null and orderCode != ''">
+				AND a.order_code LIKE 
+					<if test="dbName == 'oracle'">'%'||#{orderCode}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{orderCode}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{orderCode},'%')</if>
+			</if>
+			<if test="billStatus != null and billStatus != ''">
+				AND a.bill_status = #{billStatus}
+			</if>
+			<if test="beginSubmitDate != null and endSubmitDate != null and beginSubmitDate != '' and endSubmitDate != ''">
+				AND a.submit_date BETWEEN #{beginSubmitDate} AND #{endSubmitDate}
+			</if>
+			<if test="sendName != null and sendName != ''">
+				AND a.send_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{sendName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{sendName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{sendName},'%')</if>
+			</if>
+			<if test="receivePhone != null and receivePhone != ''">
+				AND a.receive_phone LIKE 
+					<if test="dbName == 'oracle'">'%'||#{receivePhone}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{receivePhone}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{receivePhone},'%')</if>
+			</if>
+		</where>
+		<!-- group by a.id -->
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="RdcOutHeader">
+		SELECT 
+			<include refid="rdcOutHeaderColumns"/>
+		FROM rdc_out_header a
+		<include refid="rdcOutHeaderJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO rdc_out_header(
+			id,
+			code,
+			order_code,
+			out_type_code,
+			upload_id,
+			upload_time,
+			scan_by,
+			scan_begin_time,
+			bill_type,
+			bill_status,
+			submit_by,
+			submit_date,
+			send_id,
+			send_code,
+			send_name,
+			receive_id,
+			receive_name,
+			receive_phone,
+			receive_address,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{code},
+			#{orderCode},
+			#{outTypeCode},
+			#{uploadId},
+			#{uploadTime},
+			#{scanBy},
+			#{scanBeginTime},
+			#{billType},
+			#{billStatus},
+			#{submitBy},
+			#{submitDate},
+			#{sendId},
+			#{sendCode},
+			#{sendName},
+			#{receiveId},
+			#{receiveName},
+			#{receivePhone},
+			#{receiveAddress},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE rdc_out_header SET 	    
+			code = #{code},
+			order_code = #{orderCode},
+			out_type_code = #{outTypeCode},
+			upload_id = #{uploadId},
+			upload_time = #{uploadTime},
+			scan_by = #{scanBy},
+			scan_begin_time = #{scanBeginTime},
+			bill_type = #{billType},
+			bill_status = #{billStatus},
+			submit_by = #{submitBy},
+			submit_date = #{submitDate},
+			send_id = #{sendId},
+			send_code = #{sendCode},
+			send_name = #{sendName},
+			receive_id = #{receiveId},
+			receive_name = #{receiveName},
+			receive_phone = #{receivePhone},
+			receive_address = #{receiveAddress},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE rdc_out_header SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<!-- api附加 -->
+	<select id="findAll" resultType="RdcOutHeader">
+		SELECT 
+			  rh.`id` AS rId,
+			  rh.`code`AS rCode,
+			  rh.`bill_type` AS billType,
+			  rh.`bill_status` AS billStatus,
+			  rh.`send_id` AS sendId,
+			  rh.`send_name` AS sendName,
+			  rh.`receive_id` AS receiveId,
+			  rh.`upload_id` AS uploadId,
+			  rh.`upload_time` uploadTime,
+			  rh.`submit_by` AS sumitBy,
+			  rh.`scan_by` AS scanBy,
+			  rd.`header_id` AS headerId,
+			  rd.`product_id` AS productId,
+			  p.`code` AS pCode,
+			  p.`sku` AS pSku,
+			  p.`name` AS pName,
+			  rh.`send_id` AS sendId,
+			  rh.`receive_id` AS receiveId,
+			  rd.`batch_code` AS batchId,
+			  rd.`expect_pcs_qty` AS expectPcsQty,
+			  rd.`actual_pcs_qty` AS actualPcsQty
+		FROM
+			  rdc_out_header rh,
+			  rdc_out_detail rd,
+			  product p 
+	    WHERE rh.`id` = rd.`header_id` 
+			  AND rd.`product_id` = p.`id` 
+			  AND rh.`send_id` = #{sendId}
+			  AND rh.`scan_by` = #{scanBy} 
+	</select>
+
+
+	<select id="findByCode" resultType="RdcOutHeader">
+		SELECT
+		id
+		FROM
+		rdc_out_header
+		WHERE
+		order_code =#{order_code}
+	</select>
+	<update id="truncate">
+		delete from rdc_out_header
+	</update>
+	
+</mapper>

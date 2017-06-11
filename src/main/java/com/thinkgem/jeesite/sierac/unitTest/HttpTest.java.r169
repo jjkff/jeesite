@@ -1,0 +1,39 @@
+/**
+ * Project Name:JeeSite
+ * File Name:HttpTest.java
+ * Package Name:com.thinkgem.jeesite.sierac.unitTest
+ * Date:2017年3月31日下午3:00:00
+ * Copyright (c) 2017, bluemobi All Rights Reserved.
+ *
+ */
+
+package com.thinkgem.jeesite.sierac.unitTest;
+
+import java.io.IOException;
+
+import org.apache.http.client.ClientProtocolException;
+
+import com.thinkgem.jeesite.common.utils.HttpByMjj;
+
+//
+//
+
+/**
+ * Description: <br/>
+ * Date: 2017年3月31日 下午3:00:00 <br/>
+ * 
+ * @author mjj
+ * @version
+ * @see
+ */
+public class HttpTest {
+    @SuppressWarnings("static-access")
+    public static void main(String[] args) throws ClientProtocolException, IOException {
+        HttpByMjj httpByMjj = new HttpByMjj();
+        for (int i = 0; i < 100; i++) {
+            httpByMjj.uploadFile("http://192.168.1.163:8080/jeesite/a/api/v1/files/upload",
+                    "C:\\Users\\mjj\\Desktop\\T05001708220170228004170228200054.zip");
+            System.out.println("mjj:" + i);
+        }
+    }
+}

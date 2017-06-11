@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.sierac.dao.ApiRdcOutHeaderDao">
+	<update id="updateAll">
+	UPDATE 
+	  rdc_return_header 
+	SET
+	  `order_code` = #{code},
+	  `bill_type` = #{bill_type},
+	  `bill_status` = #{bill_status},
+	   `send_id` = #{send_id},
+	   `send_name` = #{send_name},
+	   `receive_id` = #{receive_id},
+	  `upload_id` = #{upload_id},
+	  `upload_time` = #{upload_time}, 
+	  `submit_by` = #{submit_by},
+	  `scan_by` = #{scan_by}
+	WHERE `id` = #{id}
+	</update>
+</mapper>
